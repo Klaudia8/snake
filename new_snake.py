@@ -60,6 +60,7 @@ def new_position(snake_parts, arrow):
         if game_over:
             print(snake_parts)
             print('You bited yourself. Game over!')
+            print(f'{x} : {y}')
             sys.exit()
 
     new_snake.insert(0, snake_head)
@@ -73,6 +74,24 @@ def put_apple(screen_width, screen_height):
     return [pos_x, pos_y]
 
 
+def add_snake_part(part):
+    if event.key == right_arrow:
+        print('right')
+        snake_tail = pygame.Rect((part[0] + snake_width, part[1], snake_width, snake_width))
+    elif event.key == left_arrow:
+        print('left')
+        snake_tail = pygame.Rect((part[0] - snake_width, part[1], snake_width, snake_width))
+    elif event.key == up_arrow:
+        print('up')
+        snake_tail = pygame.Rect((part[0], part[1] - snake_width, snake_width, snake_width))
+    elif event.key == down_arrow:
+        print('down')
+        snake_tail = pygame.Rect((part[0], part[1] + snake_width, snake_width, snake_width))
+
+    print(f'snake tail: {snake_tail}')
+    return snake_tail
+
+
 # checks whether snake ate an apple
 def check_apple_eaten(apple_pos, snake_parts, points):
     global snake_length, score
@@ -82,9 +101,11 @@ def check_apple_eaten(apple_pos, snake_parts, points):
             break
 
     if eaten:
-        snake_part = snake_parts[-1]
+        head = snake_parts[0]
+        tail = snake_parts[-1]
+        print(f'head: {head} -- tail: {tail}')
         # TO DO !!! snake twoerdzi, ze sie je jak robi wezyka, a tymczasem to tlyko jablko, lepiej tym zarzadzac!
-        snake_parts.append(pygame.Rect((snake_part[0]+snake_width, snake_part[1]+snake_width, snake_width, snake_width)))
+        snake_parts.append(add_snake_part(head))
         points += 1
 
     return points
